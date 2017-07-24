@@ -1,0 +1,5 @@
+<form action="/form-submit" enctype="multipart/form-data" method="post">
+<?= $html ?>
+<input name="link" readonly="readonly" type="hidden" value="http://<?= @$_SERVER[HTTP_HOST] . @$_SERVER[REQUEST_URI]; ?>"/>
+<input type="submit" name="Gửi">
+</form>

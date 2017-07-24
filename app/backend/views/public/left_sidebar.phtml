@@ -1,0 +1,185 @@
+<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+        <a class="btn btn-success" href="{{ url('dashboard/index') }}" title="{{ trans('dashboard') }}">
+            <i class="icon-signal"></i>
+        </a>
+        <a class="btn btn-info" href="{{ url('articles/write') }}" title="{{ trans('article-management') }}">
+            <i class="icon-pencil"></i>
+        </a>
+        <a class="btn btn-warning" href="{{ url('users/index') }}" title="{{ trans('users') }}">
+            <i class="icon-group"></i>
+        </a>
+        <a class="btn btn-danger" href="{{ url('options/base') }}"title="{{ trans('site-setting') }}">
+            <i class="icon-cogs"></i>
+        </a>
+    </div>
+    <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+        <span class="btn btn-success"></span>
+        <span class="btn btn-info"></span>
+        <span class="btn btn-warning"></span>
+        <span class="btn btn-danger"></span>
+    </div>
+</div>
+<ul class="nav nav-list" id="sidebar-box">
+    {% if userinfo['access'][1] is not empty or userinfo['id_profile'] == 1 %}
+    <li>
+        <a href="{{ url('dashboard/index') }}">
+            <i class="menu-icon fa fa-tachometer"></i>
+            <span class="menu-text"> {{ trans('dashboard') }} </span>
+        </a>
+    </li>
+    {% endif %}
+    <li>
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-desktop"></i>
+            <span class="menu-text"> {{ trans('content-management') }} </span>
+            <b class="arrow icon-angle-down"></b>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href="{{ url('categories/index') }}">
+                    <i class="icon-double-angle-right"></i>
+                    {{ trans('category-management') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('articles/index') }}">
+                    <i class="icon-double-angle-right"></i>
+                    {{ trans('article-management') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('sale-pages/index') }}">
+                    <i class="icon-double-angle-right"></i>
+                    {{ trans('sale-page-management') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('tags/index') }}">
+                    <i class="icon-double-angle-right"></i>
+                    {{ trans('tag-management') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('menu/index') }}">
+                    <i class="icon-double-angle-right"></i>{{ trans('menu-management') }}
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon ace-icon fa fa-certificate"></i>
+            <span class="menu-text"> {{ trans('digital-marketing') }} </span>
+            <b class="arrow icon-angle-down"></b>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href="{{ url('banners/index') }}">
+                    <i class="icon-double-angle-right"></i>
+                    {{ trans('banner-management') }}
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-pencil-square-o"></i>
+            <span class="menu-text"> {{ trans('forms') }} </span>
+            <b class="arrow icon-angle-down"></b>
+        </a>
+        <ul class="submenu">
+            {% if userinfo['access'][2] is not empty or userinfo['id_profile'] == 1 %}
+            <li>
+                <a href="{{ url('forms/index') }}">
+                    <i class="icon-double-angle-right"></i>{{ trans('forms-management') }} 
+                </a>
+            </li>
+            {% endif %}
+            {% if userinfo['access'][3] is not empty or userinfo['id_profile'] == 1 %}
+            <li>
+                <a href="{{ url('forms-submit/index') }}">
+                    <i class="icon-double-angle-right"></i>{{ trans('forms-submit-management') }}
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </li>
+    <li>
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-users"></i>
+            <span class="menu-text"> {{ trans('users') }} </span>
+            <b class="arrow icon-angle-down"></b>
+        </a>
+        <ul class="submenu">
+            {% if userinfo['access'][11] is not empty or userinfo['id_profile'] == 1 %}
+            <li>
+                <a href="{{ url('profile/index') }}">
+                    <i class="icon-double-angle-right"></i>{{ trans('profile-management') }}
+                </a>
+            </li>
+            {% endif %}
+            {% if userinfo['access'][12] is not empty or userinfo['id_profile'] == 1 %}
+            <li>
+                <a href="{{ url('users/index') }}">
+                    <i class="icon-double-angle-right"></i>{{ trans('users-management') }}
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </li>
+    {% if userinfo['access'][9] is not empty or userinfo['id_profile'] == 1 %}
+    <li>
+        <a href="javascript:void(0);" class="dropdown-toggle">
+            <i class="menu-icon fa fa-cogs"></i>
+            <span class="menu-text"> {{ trans('site-config') }} </span>
+            <b class="arrow icon-angle-down"></b>
+        </a>
+        <ul class="submenu">
+            <li>
+                <a href="{{ url('options/base') }}">
+                    <i class="icon-double-angle-right"></i>{{ trans('site-setting') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('options/mail') }}">
+                    <i class="icon-double-angle-right"></i>{{ trans('mail-setting') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('options/api') }}">
+                    <i class="icon-double-angle-right"></i>{{ trans('api-setting') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('options/read') }}">
+                    <i class="icon-double-angle-right"></i>{{ trans('view-setting') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('modules/index') }}">
+                    <i class="icon-double-angle-right"></i>{{ trans('modules') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('widget-page/index') }}">
+                    <i class="icon-double-angle-right"></i>{{ trans('label.widget-page-management') }}
+                </a>
+            </li>
+        </ul>
+    </li>
+    {% endif %}
+</ul>
+<div class="sidebar-collapse" id="sidebar-collapse">
+    <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+</div>
+<script type="text/javascript">
+    $('#sidebar-box a').each(function(){
+        var href = $.trim($(this).attr('href'));
+        if(href == window.location.pathname){
+            $(this).parent("li").parent("ul").parent("li").addClass("active").addClass("open");
+            $(this).parent("li").addClass("active");
+            return false;
+        }
+    });
+</script>

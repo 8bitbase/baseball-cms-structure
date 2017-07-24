@@ -1,0 +1,226 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('banners/index') }}">{{ trans('label.banners') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('banners/index') }}">{{ trans('label.banners') }}</a>
+            <small>
+                <i class="icon-double-angle-right"></i>
+                {{ trans('info-change') }}
+            </small>
+        </h1>
+    </div>
+    <div class="col-lg-12">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#users" data-toggle="tab">{{ trans('label.banner') }}</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="banners">
+                <form action="{{url('banners/publish')}}" method="post" enctype="multipart/form-data" class="form-horizontal" id="save-banners-form">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">{{ trans('label.name') }}</label>
+                        <div class="col-sm-5">
+                            <input type="text" autocomplete="off" {% if banners.name is not empty %}value="{{banners.name}}" {% endif %} class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="url" class="col-sm-2 control-label">{{ trans('label.url') }}</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="url" value="{% if banners.url is not empty %}{{banners.url}}{% endif %}" class="form-control" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.position') }}</label>
+                        <div class="controls col-xs-12 col-sm-9">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <select class="form-control" id="position" name="position">
+                                    {% for index, position in positions %}
+                                        <option value="{{ index }}" {% if banners.position is not empty and banners.position == index %} selected {% endif %}>{{ trans(position) }}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="radio form-group">
+                        <div class="col-sm-1 col-sm-offset-2">
+                            <label>
+                                <input id="input_file" name="check-banner" {% if banners.banner is not empty or banners.banner is empty and banners.html is empty %}checked{% endif %} type="radio" class="ace"/>
+                                <span class="lbl">{{ trans('label.banner') }}</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-1">
+                            <label>
+                                <input id="input_html" name="check-banner" {% if banners.html is not empty %}checked{% endif %} type="radio" class="ace" />
+                                <span class="lbl">{{ trans('label.html') }}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="group_html" class="form-group" {% if banners.banner is not empty or banners.banner is empty and banners.html is empty %}style="display:none"{% endif %}>
+                        <label for="html" class="col-sm-2 control-label">{{ trans('label.html') }}</label>
+                        <div class="col-sm-5 has-success">
+                            <textarea id="html" name="html" class="tinymce autosize-transition form-control" autocomplete="off">{% if banners.html is not empty %}{{banners.html}}{% endif %}</textarea>
+                            <div class="help-block col-xs-12 col-sm-reset">
+                                Width = 100%
+                            </div>
+                        </div>
+                    </div>
+                    <div id="group_file" class="form-group" {% if banners.html is not empty %}style="display:none"{% endif %}>
+                        <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.banner') }}</label>
+                        <div class="controls col-xs-12 col-sm-9">
+                            <div class="row">
+                                <div class="col-xs-3 has-success">
+                                    <label>
+                                        <input name="banner" id="banner" class="ace ace-switch ace-switch-4 btn-flat" type="file" accept="image/*" />
+                                        <div class="help-block col-xs-12 col-sm-reset">
+                                            File size max: 2MB
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display:none" id="review">
+                        <label for="archive-name" class="col-sm-2 control-label"></label>
+                        <div class="controls col-xs-12 col-sm-9">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <label>
+                                        <img id="review-banner" src="#" alt="Banner" class="img-responsive" />
+                                        <span class="lbl"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.random') }}</label>
+                        <div class="controls col-xs-12 col-sm-9">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <label>
+                                        <input name="is_fixed" id="is_fixed" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" value="1" {% if (banners.is_fixed is not empty and banners.is_fixed == 1) or banners.id is empty %} checked="checked"{% endif %} />
+                                        <span class="lbl"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.fixed') }}</label>
+                        <div class="controls col-xs-12 col-sm-9">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <label>
+                                        <input name="fixedtime" id="fixedtime" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" value="0" {% if banners.start_fixed is not empty %} checked="checked" {% endif %} />
+                                        <span class="lbl"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group fixedtime-input" {% if (banners.is_fixed is not empty and banners.is_fixed == 1) or banners.id is empty %} style="display:none" {% endif %}>
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-5">
+                            <div class="col-sm-6">
+                                <input type="text" name="starttime" value="{% if banners.start_fixed is not empty %}{{banners.start_fixed}}{% endif %}" class="form-control" id="starttime" autocomplete="off">
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" readonly="readonly" name="endtime" value="{% if banners.end_fixed is not empty %}{{banners.end_fixed}}{% endif %}" class="form-control" id="endtime" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="archive-name" class="col-sm-2 control-label">{{ trans('label.status') }}</label>
+                        <div class="controls col-xs-12 col-sm-9">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <label>
+                                        <input name="status" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" value="1" {% if banners.status is not empty and banners.status == 1 %}checked="checked"{% endif %} />
+                                        <span class="lbl"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-5">
+                            <input type="hidden" {% if banners.id is not empty %} value="{{banners.id}}" {% endif %} class="form-control" name="id" id="id">
+                            <button type="submit" id="save-banners-btn" class="btn btn-info btn-sm">{{ trans('save') }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="{{ static_url('tagsinput/jquery.tagsinput.css?_v=')~assetsVersion }}" />
+<script src="{{ static_url('tagsinput/jquery.tagsinput.js?_v=')~assetsVersion }}"></script>
+<script src="{{ static_url('my97datepicker/WdatePicker.js?_v=')~assetsVersion }}"></script>
+<script>
+    $('.fixedtime-input').on('click', function(){
+        WdatePicker({
+            dateFmt:'yyyy-MM-dd HH:mm'
+        });
+    });
+    $('#fixedtime').on('change', function () {
+        var fixedtime = $('#fixedtime')[0].checked;
+        $('#is_fixed').attr('checked', !fixedtime);
+        if (!fixedtime) {
+            $('.fixedtime-input').hide();
+        } else {
+            $('.fixedtime-input').show();
+        }
+    });
+
+    $('#is_fixed').on('change', function () {
+        var is_fixed = $('#is_fixed')[0].checked;
+        $('#fixedtime').attr('checked', !is_fixed);
+        if (is_fixed) {
+            $('.fixedtime-input').hide();
+            $('input[name=starttime], input[name=endtime]').val('');
+        }
+    });
+
+    function review_banner(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#review-banner').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+            $('#review').show();
+        } else {
+            $('#review').hide();
+        }
+    };
+
+    $('#banner').change(function(){
+        review_banner(this);
+    });
+
+    $('#input_file').on('click', function(){
+       $('#group_file').show()
+       $('#group_html').hide();
+       $('#html').val('');
+    });
+    
+    $('#input_html').on('click', function(){
+       $('#group_file').hide();
+       $('#group_html').show();
+       $('input[type=file]').val('');
+       $('#review').hide();
+    });
+</script>

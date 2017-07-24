@@ -1,0 +1,135 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('sale-pages/index') }}">{{ trans('sale-page-management') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('sale-pages/index') }}">{{ trans('sale-page-management') }}</a>
+            <small>
+                <i class="icon-double-angle-right"></i>
+                {{ trans('sale-page-list') }}
+            </small>
+        </h1>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <select name="id_category" class="form-control">
+                            <option>{{ trans('label.please-select') }}</option>
+                            {% for value in categoryList %}
+                                {% if id_category is not empty and id_category == value['id'] %}
+                                    <option value="{{value['id']}}" selected="selected">
+                                {% else %}
+                                    <option value="{{value['id']}}">
+                                {% endif %}
+                                {% if value['parent'] > 0 %}
+                                    {{ str_repeat('-', substr_count(value['path'], '/')) }}
+                                    {{value['name']}}
+                                {% else %}
+                                    {{value['name']}}
+                                {% endif %}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text" name="keyword" class="form-control" placeholder="{{ trans('label.keyword') }}" {% if keyword is not empty %}value="{{keyword}}"{% endif %} />
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-info btn-sm">
+                                    {{ trans('label.search') }}
+                                    <i class="icon-search icon-on-right bigger-110"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="btn-panel">
+                            <a href="{{ url('sale-pages/write') }}" class="btn btn-success btn-sm" role="button">{{ trans('label.add') }}</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table class="table tree-grid table-striped table-bordered table-condensed table-hover" id="test-table">
+                    <thead>
+                        <tr>
+                            <th width="20%">{{ trans('label.title') }}</th>
+                            <th width="20%">{{ trans('label.category') }}</th>
+                            <th>{{ trans('label.created') }}</th>
+                            <th>{{ trans('label.updated') }}</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    {% if salePages is not empty %}
+                        <tbody>
+                            {% for salePage in salePages %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ url('sale-pages/write?id='~salePage['id']) }}" title="{{ trans('label.edit') }}">
+                                            {{salePage['name']}}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {% for ck, cv in salePage['categories'] %}
+                                            {% if ck == 0 %}
+                                                <a href="{{ url('sale-pages/index?id_category='~cv['id']) }}" title="{{ trans('label.view') }}">
+                                                    {{cv['name']}}
+                                                </a>
+                                            {% else %}
+                                                ,<a href="{{ url('sale-pages/index?id_category='~cv['id']) }}" title="{{ trans('label.view') }}">
+                                                    {{cv['name']}}
+                                                </a>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{salePage['create_time']}}</td>
+                                    <td>{{salePage['modify_time']}}</td>
+                                    <td>
+                                        <a class="btn btn-xs btn-info" href="/du-an/{{salePage['alias']}}.html/review" title="{{ trans('label.view') }}" target="_blank">
+                                            <i class="fa fa-eye bigger-120"></i>
+                                        </a>
+                                        <a class="btn btn-xs btn-info" href="{{ url('sale-pages/write?id='~salePage['id']) }}" title="{{ trans('label.edit') }}">
+                                            <i class="icon-edit bigger-120"></i>
+                                        </a>
+                                        <button class="btn btn-xs btn-danger delete-sale-pages" data-url="{{ url('sale-pages/delete?id='~salePage['id']) }}" title="{{ trans('label.delete') }}">
+                                            <i class="icon-trash bigger-120"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    {% else %}
+                        <tbody>
+                        <tr>
+                            <td colspan="7">{{ trans('label.no-data') }}</td>
+                        </tr>
+                        </tbody>
+                    {% endif %}
+                </table>
+                {% if salePages is not empty %}
+                    {{ partial('public/paginator') }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.delete-sale-pages').on('click', function(){
+        var dataUrl = $.trim($(this).attr('data-url'));
+        if(!window.confirm("{{ trans('alert.is-delete-selected') }}")){
+            return false;
+        }
+        window.location.href = dataUrl;
+    });
+</script>

@@ -1,0 +1,16 @@
+<!-- Banner quảng cáo 2 bên-->
+
+<div id="divAdRight" style="display: block; position: fixed; top: 0px;">
+{% if bannerRightHeader is not empty %}
+    {% for banner in bannerRightHeader %}
+        <p><a href="{{ banner['url'] }}"><img src="{{ banner['banner'] }}" width="125" /></a></p>
+    {% endfor %}
+{% endif %}
+</div>
+<div id="divAdLeft" style="display: block; position: fixed; top: 0px;">
+{% if bannerLeftHeader is not empty %}
+    {% for banner in bannerLeftHeader %}
+        <p><a href="{{ banner['url'] }}"><img src="{{ banner['banner'] }}" width="125" /></a></p>
+    {% endfor %}
+{% endif %}
+</div>

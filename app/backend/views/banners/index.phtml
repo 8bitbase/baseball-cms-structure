@@ -1,0 +1,137 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('banners/index') }}">{{ trans('banner-management') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('banners/index') }}">{{ trans('banner-management') }}</a>
+            <small>
+                <i class="icon-double-angle-right"></i>
+                {{ trans('list') }}
+            </small>
+        </h1>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text" name="keyword" class="form-control" placeholder="{{ trans('label.keyword') }}" {% if keyword is not empty %}value="{{keyword}}"{% endif %} />
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-info btn-sm">
+                                    {{ trans('label.search') }}
+                                    <i class="icon-search icon-on-right bigger-110"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="btn-panel">
+                            <a href="{{ url('banners/write') }}" class="btn btn-success btn-sm" role="button">{{ trans('label.add') }}</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table class="table tree-grid table-striped table-bordered table-condensed table-hover" id="test-table">
+                    <thead>
+                        <tr>
+                            <th width="5%">{{ trans('label.banner-id') }}</th>
+                            <th width="10%">{{ trans('label.banner') }}</th>
+                            <th width="15%">{{ trans('label.banner-name') }}</th>
+                            <th width="15%">{{ trans('label.banner-link') }}</th>
+                            <th width="10%">{{ trans('label.banner-position') }}</th>
+                            <th width="5%">{{ trans('label.banner-fixed') }}</th>
+                            <th width="20%">{{ trans('label.banner-display-time') }}</th>
+                            <th width="5%">{{ trans('label.banner-status') }}</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    {% if banners is not empty %}
+                        <tbody>
+                            {% for banners in banners %}
+                                <tr>
+                                    <td>
+                                        {{banners['id']}}
+                                    </td>
+                                    <td style="width: 100px" >
+                                        {% if banners['banner'] is not empty %}
+                                            <img style="width: 100px" src="{{banners['banner']}}" class="img-responsive img">
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{banners['name']}}
+                                    </td>
+                                    <td>
+                                        {{banners['url']}}
+                                    </td>
+                                    <td>
+                                        {{ trans(banners['position']) }}                                    
+                                    </td>
+                                    <td>
+                                        {% if banners['is_fixed'] != 0 %}
+                                            <span class="label label-success label-white middle">
+                                                X
+                                            </span>                                            
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if banners['start_fixed'] is not empty and banners['end_fixed'] is not empty %}
+                                            {{banners['start_fixed']}} ~ {{banners['end_fixed']}}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if banners['status'] == 0 %}
+                                            <span class="label label-white middle">
+                                                <s>{{ trans('label.inactive') }}</s>
+                                            </span>
+                                        {% else %}
+                                            <span class="label label-success label-white middle">
+                                                {{ trans('label.active') }}
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-xs btn-info" href="{{ url('banners/write?id='~banners['id']) }}" title="{{ trans('label.edit') }}">
+                                            <i class="icon-edit bigger-120"></i>
+                                        </a>
+                                        <button class="btn btn-xs btn-danger delete-forms" data-url="{{ url('banners/delete?id='~banners['id']) }}" title="{{ trans('label.delete') }}">
+                                            <i class="icon-trash bigger-120"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    {% else %}
+                        <tbody>
+                        <tr>
+                            <td colspan="9">{{ trans('label.no-data') }}</td>
+                        </tr>
+                        </tbody>
+                    {% endif %}
+                </table>
+                {% if banners is not empty %}
+                    {{ partial('public/paginator') }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.delete-forms').on('click', function(){
+        var dataUrl = $.trim($(this).attr('data-url'));
+        if(!window.confirm("{{ trans('alert.is-delete-selected') }}")){
+            return false;
+        }
+        window.location.href = dataUrl;
+    });
+</script>

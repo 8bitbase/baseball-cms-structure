@@ -1,0 +1,107 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="{{ url('dashboard/index') }}">{{ trans('dashboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('forms-submit/index') }}">{{ trans('forms-submit-management') }}</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <a href="{{ url('forms-submit/index') }}">{{ trans('forms-submit-management') }}</a>
+            <small>
+                <i class="icon-double-angle-right"></i>
+                {{ trans('list') }}
+            </small>
+        </h1>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text" name="keyword" class="form-control" placeholder="{{ trans('label.keyword') }}" {% if keyword is not empty %}value="{{keyword}}"{% endif %} />
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-info btn-sm">
+                                    {{ trans('label.search') }}
+                                    <i class="icon-search icon-on-right bigger-110"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table class="table tree-grid table-striped table-bordered table-condensed table-hover" id="test-table">
+                    <thead>
+                        <tr>
+                            <th>{{ trans('label.id') }}</th>
+                            <th>{{ trans('label.fullname') }}</th>
+                            <th>{{ trans('label.email') }}</th>
+                            <th>{{ trans('label.phone') }}</th>
+                            <th>{{ trans('label.ip') }}</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    {% if formsSubmit is not empty %}
+                        <tbody>
+                            {% for formsSubmit in formsSubmit %}
+                                <tr>
+                                    <td>
+                                        {{formsSubmit['id']}}
+                                    </td>
+                                    <td>
+                                        <a href="{{ url('forms-submit/write?id='~formsSubmit['id']) }}" title="{{ trans('label.edit') }}">
+                                            {{formsSubmit['fullname']}}
+                                        </a>
+                                        
+                                    </td>
+                                    <td>
+                                        {{formsSubmit['email']}}
+                                    </td>
+                                    <td>
+                                        {{formsSubmit['phone']}}
+                                    </td>
+                                    <td>
+                                        {{formsSubmit['ip']}}
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-xs btn-info" href="{{ url('forms-submit/write?id='~formsSubmit['id']) }}" title="{{ trans('label.edit') }}">
+                                            <i class="fa fa-eye bigger-120"></i>
+                                        </a>
+                                        <button class="btn btn-xs btn-danger delete-formsSubmit" data-url="{{ url('forms-submit/delete?id='~formsSubmit['id']) }}" title="{{ trans('label.delete') }}">
+                                            <i class="icon-trash bigger-120"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    {% else %}
+                        <tbody>
+                        <tr>
+                            <td colspan="6">{{ trans('label.no-data') }}</td>
+                        </tr>
+                        </tbody>
+                    {% endif %}
+                </table>
+                {% if formsSubmit is not empty %}
+                    {{ partial('public/paginator') }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.delete-formsSubmit').on('click', function(){
+        var dataUrl = $.trim($(this).attr('data-url'));
+        if(!window.confirm("{{ trans('alert.is-delete-selected') }}")){
+            return false;
+        }
+        window.location.href = dataUrl;
+    });
+</script>

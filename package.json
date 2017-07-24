@@ -1,0 +1,21 @@
+{
+  "name": "baseball-cms-structure",
+  "version": "1.0.0",
+  "main": "gulpfile.js",
+  "scripts": {
+    "prod": "gulp --production",
+    "dev": "gulp watch"
+  },
+  "dependencies": {
+    "bootstrap-sass": "^3.3.7",
+    "gulp": "^3.9.1",
+    "gulp-minify-css": "^1.2.4",
+    "jquery": "^3.1.0"
+  },
+  "author": "lechidung",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/8bitbase/baseball-cms-structure/issues"
+  },
+  "homepage": "https://github.com/8bitbase/baseball-cms-structure#readme"
+}
